@@ -27,5 +27,5 @@
 # Go workspace file
 go.work
 tmp
-
+books-api
 # End of https://www.toptal.com/developers/gitignore/api/go
