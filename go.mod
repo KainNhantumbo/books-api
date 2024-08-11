@@ -1,4 +1,4 @@
-module github.com/KainNhantumbo/go-books-api
+module github.com/KainNhantumbo/books-api
 
 go 1.22.4
 
