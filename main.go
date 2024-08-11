@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/KainNhantumbo/books-api/controllers"
+	"github.com/KainNhantumbo/books-api/router"
 	"github.com/gofiber/fiber/v2"
 	"log"
 )
@@ -12,7 +12,12 @@ func main() {
 		Prefork:                 true,
 	})
 
-	app.Get("/api/v1/books", controllers.GetBooks)
+	router.BookRouter(app)
 
-	log.Fatal(app.Listen(":8080"))
+	err := app.Listen(":8080")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }
