@@ -6,6 +6,7 @@ import (
 	"github.com/KainNhantumbo/books-api/database"
 	"github.com/KainNhantumbo/books-api/internal/model"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 type Book struct {
@@ -57,7 +58,7 @@ func UpdateOne(c *fiber.Ctx) error {
 	db := database.DB
 	book := new(model.Book)
 
-	if id == "" {
+	if book.ID == uuid.Nil {
 		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Invalid request ID."})
 	}
 	// check if this book really exists
@@ -87,21 +88,23 @@ func UpdateOne(c *fiber.Ctx) error {
 
 func DeleteOne(c *fiber.Ctx) error {
 	id := c.Params("id")
+	db := database.DB
+	book := new(model.Book)
 
-	if id == "" {
-		return c.Status(400).SendString("Invalid request Id.")
+	if book.ID == uuid.Nil {
+		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Invalid request ID."})
+	}
+	// check if this book really exists
+	result := db.First(&book, id)
+	if result.Error != nil {
+		return c.Status(404).JSON(fiber.Map{"status": 404, "message": "Book not found."})
 	}
 
-	var updatedBooks []Book = []Book{}
+	result = db.Delete(&model.Book{})
 
-	// Iterate over the original slice
-	for _, book := range data {
-		if book.Id != id {
-			updatedBooks = append(updatedBooks, book)
-		}
+	if result.Error != nil {
+		c.Status(500).JSON(fiber.Map{"status": 500, "message": "Failed to delete book."})
 	}
-
-	data = updatedBooks
-	return c.JSON(updatedBooks)
+	return c.SendStatus(204)
 
 }
