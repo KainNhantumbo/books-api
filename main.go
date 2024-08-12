@@ -1,9 +1,12 @@
 package main
 
 import (
+	"log"
+
+	"github.com/KainNhantumbo/books-api/config"
+	"github.com/KainNhantumbo/books-api/database"
 	"github.com/KainNhantumbo/books-api/router"
 	"github.com/gofiber/fiber/v2"
-	"log"
 )
 
 func main() {
@@ -14,7 +17,11 @@ func main() {
 
 	router.BookRouter(app)
 
-	err := app.Listen(":8080")
+	// Connect to the Database
+	database.ConnectDB()
+
+	port := config.Config("PORT")
+	err := app.Listen(":" + port)
 
 	if err != nil {
 		log.Fatal(err)
