@@ -6,8 +6,10 @@ import (
 )
 
 func BookRouter(app *fiber.App) {
-	app.Get("/books", book.FindAll)
-	app.Post("/books", book.Create)
-	app.Patch("/books/:id", book.UpdateOne)
-	app.Delete("/books/:id", book.DeleteOne)
+	route := app.Group("/api/v1/books")
+
+	route.Get("/", book.FindAll)
+	route.Post("/", book.Create)
+	route.Patch("/:id", book.UpdateOne)
+	route.Delete("/:id", book.DeleteOne)
 }

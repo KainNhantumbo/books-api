@@ -1,6 +1,12 @@
 package book
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"time"
+
+	"github.com/KainNhantumbo/books-api/database"
+	"github.com/KainNhantumbo/books-api/internal/model"
+	"github.com/gofiber/fiber/v2"
+)
 
 type Book struct {
 	Id          string `json:"id"`
@@ -15,42 +21,67 @@ var data []Book = []Book{
 }
 
 func FindAll(c *fiber.Ctx) error {
-	return c.JSON(&data)
+	db := database.DB
+	var books = new([]model.Book)
+
+	db.Find(&books)
+	return c.JSON(&books)
 }
 
 func Create(c *fiber.Ctx) error {
-	book := new(Book)
-	err := c.BodyParser(book)
+	db := database.DB
+	book := new(model.Book)
+	err := c.BodyParser(&book)
 
 	if err != nil {
-		return err
+		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Data parse error."})
 	}
 
-	data := append(data, *book)
-	return c.JSON(data)
+	db.Create(&book)
+	return c.Status(201).JSON(fiber.Map{"status": 201, "message": "Book created successfully."})
 }
 
 func UpdateOne(c *fiber.Ctx) error {
+	type UpdateBook struct {
+		Name          string    `json:"name"`
+		Description   string    `json:"description"`
+		IsAvailable   bool      `json:"isAvailable"`
+		Publisher     string    `json:"publisher"`
+		Country       string    `json:"country"`
+		Category      string    `json:"category"`
+		PublishedDate time.Time `json:"publishedDate"`
+		PageCount     int32     `json:"pageCount"`
+	}
+
 	id := c.Params("id")
+	db := database.DB
+	book := new(model.Book)
 
 	if id == "" {
-		return c.Status(400).SendString("Invalid request Id.")
+		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Invalid request ID."})
+	}
+	// check if this book really exists
+	result := db.First(&book, id)
+	if result.Error != nil {
+		return c.Status(404).JSON(fiber.Map{"status": 404, "message": "Book not found."})
 	}
 
-	book := new(Book)
-
-	err := c.BodyParser(book)
-
+	updateBookData := new(UpdateBook)
+	err := c.BodyParser(&updateBookData)
 	if err != nil {
-		return err
+		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Data parse error."})
 	}
 
-	for i, item := range data {
-		if item.Id == id {
-			data[i] = *book
-			break
-		}
-	}
+	book.Name = updateBookData.Name
+	book.Description = updateBookData.Description
+	book.IsAvailable = updateBookData.IsAvailable
+	book.Publisher = updateBookData.Publisher
+	book.PublishedDate = updateBookData.PublishedDate
+	book.PageCount = updateBookData.PageCount
+	book.Country = updateBookData.Country
+	book.Category = updateBookData.Category
+
+	db.Save(&book)
 	return c.Status(200).JSON(data)
 }
 

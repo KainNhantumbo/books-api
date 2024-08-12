@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/KainNhantumbo/books-api/config"
+	"github.com/KainNhantumbo/books-api/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,4 +23,8 @@ func ConnectDB() {
 	}
 
 	fmt.Println("Database connected!")
+
+	// Migrate the database
+	DB.AutoMigrate(&model.Book{})
+	fmt.Println("Database Migrated")
 }
