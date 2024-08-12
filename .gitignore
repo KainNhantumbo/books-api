@@ -28,4 +28,5 @@
 go.work
 tmp
 books-api
+server
 # End of https://www.toptal.com/developers/gitignore/api/go
