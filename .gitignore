@@ -1,16 +1,11 @@
-# Created by https://www.toptal.com/developers/gitignore/api/go
-# Edit at https://www.toptal.com/developers/gitignore?templates=go
-
-### Go ###
-# If you prefer the allow list template instead of the deny list, see community template:
-# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
-#
 # Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+server
+books-api
 
 # Test binary, built with `go test -c`
 *.test
@@ -22,11 +17,6 @@
 .env.*
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
-
-# Go workspace file
+vendor
 go.work
 tmp
-books-api
-server
-# End of https://www.toptal.com/developers/gitignore/api/go

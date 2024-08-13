@@ -1,4 +1,4 @@
-package book
+package handlers
 
 import (
 	"time"
@@ -16,7 +16,18 @@ type Book struct {
 	IsAvailable bool   `json:"isAvailable"`
 }
 
-func FindAll(c *fiber.Ctx) error {
+type UpdateBook struct {
+	Name          string    `json:"name"`
+	Description   string    `json:"description"`
+	IsAvailable   bool      `json:"isAvailable"`
+	Publisher     string    `json:"publisher"`
+	Country       string    `json:"country"`
+	Category      string    `json:"category"`
+	PublishedDate time.Time `json:"publishedDate"`
+	PageCount     int32     `json:"pageCount"`
+}
+
+func FindAllBooks(c *fiber.Ctx) error {
 	db := database.DB
 	var books = new([]model.Book)
 
@@ -24,7 +35,7 @@ func FindAll(c *fiber.Ctx) error {
 	return c.JSON(&books)
 }
 
-func Create(c *fiber.Ctx) error {
+func CreateBook(c *fiber.Ctx) error {
 	db := database.DB
 	book := new(model.Book)
 	err := c.BodyParser(&book)
@@ -37,18 +48,7 @@ func Create(c *fiber.Ctx) error {
 	return c.Status(201).JSON(fiber.Map{"status": fiber.StatusCreated, "message": "Book created successfully."})
 }
 
-func UpdateOne(c *fiber.Ctx) error {
-	type UpdateBook struct {
-		Name          string    `json:"name"`
-		Description   string    `json:"description"`
-		IsAvailable   bool      `json:"isAvailable"`
-		Publisher     string    `json:"publisher"`
-		Country       string    `json:"country"`
-		Category      string    `json:"category"`
-		PublishedDate time.Time `json:"publishedDate"`
-		PageCount     int32     `json:"pageCount"`
-	}
-
+func UpdateOneBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := database.DB
 	book := new(model.Book)
@@ -81,7 +81,7 @@ func UpdateOne(c *fiber.Ctx) error {
 	return c.Status(200).JSON(&book)
 }
 
-func DeleteOne(c *fiber.Ctx) error {
+func DeleteOneBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := database.DB
 	book := new(model.Book)

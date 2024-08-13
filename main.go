@@ -21,7 +21,7 @@ func main() {
 
 	app.Use(recover.New())
 
-	router.BookRouter(app)
+	router.AppRouter(app)
 
 	port := config.Config("PORT")
 	err := app.Listen(":" + port)
