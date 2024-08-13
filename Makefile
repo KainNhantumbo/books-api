@@ -4,5 +4,5 @@ build:
 run:
 	go run main.go
 
-watch:
-	reflex -s -r '\.go$$' make run
+dev:
+	~/go/bin/air main.go

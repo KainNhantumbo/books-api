@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/KainNhantumbo/books-api/config"
-	"github.com/KainNhantumbo/books-api/internal/model"
+	"github.com/KainNhantumbo/books-api/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

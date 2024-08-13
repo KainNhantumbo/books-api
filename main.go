@@ -7,18 +7,21 @@ import (
 	"github.com/KainNhantumbo/books-api/database"
 	"github.com/KainNhantumbo/books-api/router"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func main() {
+	// Connect to the Database
+	database.ConnectDB()
+
 	app := fiber.New(fiber.Config{
 		EnableTrustedProxyCheck: false,
 		Prefork:                 true,
 	})
 
-	router.BookRouter(app)
+	app.Use(recover.New())
 
-	// Connect to the Database
-	database.ConnectDB()
+	router.BookRouter(app)
 
 	port := config.Config("PORT")
 	err := app.Listen(":" + port)
@@ -26,5 +29,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

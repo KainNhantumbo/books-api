@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/KainNhantumbo/books-api/database"
-	"github.com/KainNhantumbo/books-api/internal/model"
+	"github.com/KainNhantumbo/books-api/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -14,11 +14,6 @@ type Book struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	IsAvailable bool   `json:"isAvailable"`
-}
-
-var data []Book = []Book{
-	{Id: "1", Name: "The Great Gatsby", Description: "A novel written by F. Scott Fitzgerald.", IsAvailable: true},
-	{Id: "2", Name: "To Kill a Mockingbird", Description: "A novel by Harper Lee published in 1960..", IsAvailable: false},
 }
 
 func FindAll(c *fiber.Ctx) error {
@@ -35,11 +30,11 @@ func Create(c *fiber.Ctx) error {
 	err := c.BodyParser(&book)
 
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Data parse error."})
+		return c.Status(400).JSON(fiber.Map{"status": fiber.StatusBadRequest, "message": "Data parse error."})
 	}
 
 	db.Create(&book)
-	return c.Status(201).JSON(fiber.Map{"status": 201, "message": "Book created successfully."})
+	return c.Status(201).JSON(fiber.Map{"status": fiber.StatusCreated, "message": "Book created successfully."})
 }
 
 func UpdateOne(c *fiber.Ctx) error {
@@ -59,18 +54,18 @@ func UpdateOne(c *fiber.Ctx) error {
 	book := new(model.Book)
 
 	if book.ID == uuid.Nil {
-		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Invalid request ID."})
+		return c.Status(400).JSON(fiber.Map{"status": fiber.StatusBadRequest, "message": "Invalid request ID."})
 	}
 	// check if this book really exists
 	result := db.First(&book, id)
 	if result.Error != nil {
-		return c.Status(404).JSON(fiber.Map{"status": 404, "message": "Book not found."})
+		return c.Status(404).JSON(fiber.Map{"status": fiber.StatusNotFound, "message": "Book not found."})
 	}
 
 	updateBookData := new(UpdateBook)
 	err := c.BodyParser(&updateBookData)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Data parse error."})
+		return c.Status(400).JSON(fiber.Map{"status": fiber.StatusBadRequest, "message": "Data parse error."})
 	}
 
 	book.Name = updateBookData.Name
@@ -83,7 +78,7 @@ func UpdateOne(c *fiber.Ctx) error {
 	book.Category = updateBookData.Category
 
 	db.Save(&book)
-	return c.Status(200).JSON(data)
+	return c.Status(200).JSON(&book)
 }
 
 func DeleteOne(c *fiber.Ctx) error {
@@ -92,18 +87,18 @@ func DeleteOne(c *fiber.Ctx) error {
 	book := new(model.Book)
 
 	if book.ID == uuid.Nil {
-		return c.Status(400).JSON(fiber.Map{"status": 400, "message": "Invalid request ID."})
+		return c.Status(400).JSON(fiber.Map{"status": fiber.StatusBadRequest, "message": "Invalid request ID."})
 	}
 	// check if this book really exists
 	result := db.First(&book, id)
 	if result.Error != nil {
-		return c.Status(404).JSON(fiber.Map{"status": 404, "message": "Book not found."})
+		return c.Status(404).JSON(fiber.Map{"status": fiber.StatusNotFound, "message": "Book not found."})
 	}
 
 	result = db.Delete(&model.Book{})
 
 	if result.Error != nil {
-		c.Status(500).JSON(fiber.Map{"status": 500, "message": "Failed to delete book."})
+		c.Status(500).JSON(fiber.Map{"status": fiber.StatusInternalServerError, "message": "Failed to delete book."})
 	}
 	return c.SendStatus(204)
 
