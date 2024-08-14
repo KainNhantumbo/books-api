@@ -15,21 +15,37 @@ type Base struct {
 
 type Book struct {
 	Base
-	Name          string    `json:"name"`
-	Description   string    `json:"description"`
-	IsAvailable   bool      `json:"isAvailable"`
-	Publisher     string    `json:"publisher"`
-	Country       string    `json:"country"`
-	Category      string    `json:"category"`
+	Name          string    `gorm:"not null" json:"name"`
+	Description   string    `gorm:"not null" json:"description"`
+	IsAvailable   bool      `gorm:"not null" json:"isAvailable"`
+	Publisher     string    `gorm:"not null" json:"publisher"`
+	Country       string    `gorm:"not null" json:"country"`
+	Category      string    `gorm:"not null" json:"category"`
 	PublishedDate time.Time `json:"publishedDate"`
-	PageCount     int32     `json:"pageCount"`
+	PageCount     int32     `gorm:"not null" json:"pageCount"`
+}
+
+type Image struct {
+	Base
+	ImageId  string `json:"imageId"`
+	ImageUrl string `json:"imageUrl"`
 }
 
 type User struct {
 	Base
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
+	FirstName string `gorm:"not null" json:"firstName"`
+	LastName  string `gorm:"not null" json:"lastName"`
 	Email     string `gorm:"uniqueIndex;not null" json:"email"`
-	Password  string `json:"password"`
-	Author    string `json:"author"`
+	Password  string `gorm:"not null" json:"password"`
+	Bio       string `json:"bio"`
+	Avatar    *Image `json:"avatar"`
+}
+
+type SocialMedia struct {
+	Base
+	Facebook string `json:"facebook"`
+	Blog     string `json:"blog"`
+	Github   string `json:"github"`
+	LinkedIn string `json:"linkedIn"`
+	UserId   *User  `gorm:"not null" json:"userId"`
 }
