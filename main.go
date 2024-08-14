@@ -1,13 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/KainNhantumbo/books-api/config"
 	"github.com/KainNhantumbo/books-api/database"
 	"github.com/KainNhantumbo/books-api/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
@@ -35,6 +38,19 @@ func main() {
 		AllowOrigins:     allowedDomains,
 		AllowCredentials: true,
 		AllowMethods:     "GET,POST,DELETE,PATCH",
+	}))
+
+	app.Use(limiter.New(limiter.Config{
+		Max:        20,
+		Expiration: 60 * time.Second,
+		LimitReached: func(c *fiber.Ctx) error {
+			return c.JSON(fiber.Map{
+				"message": fmt.Sprintf("Too many requests from your IP, please try again after 60 seconds. Method: %s\tUrl:%s\tOrigin:%s",
+					c.Method(),
+					c.OriginalURL(),
+					c.GetReqHeaders()["Origin"]),
+			})
+		},
 	}))
 
 	app.Use(logger.New(logger.Config{
