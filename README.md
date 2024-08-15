@@ -1,4 +1,4 @@
-# 🌟 Books Store API (Go + PostgreSQL)
+# 🌟 Books Store API (Golang + PostgreSQL)
 
 This is a server application built as part of my side project (books web store) to practice Golang language.
 
@@ -16,7 +16,7 @@ This project is currently under active development, it means that new features a
 
 ## 🏗️ Testing and Local Setup
 
-Make sure you have installed **Go 1.22.4 or later**.\
+Make sure you have installed **Go 1.22.4 or later**.
 
 > **IMPORTANT**: - Make sure you add those environment variables below to your .env file:
 
@@ -71,7 +71,7 @@ My Blog: [https://codenut-dev.vercel.app/blog](https://codenut-dev.vercel.app/bl
 #### If you like this project, let me know by leaving a star on this repository so I can keep improving this app.😊😘
 
 Best regards, Kain Nhantumbo.\
-✌️🇲🇿 **Made with ❤ Nest.JS and Typescript**
+✌️🇲🇿 **Made with ❤ Golang**
 
 ## 📜 License
 

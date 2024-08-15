@@ -9,7 +9,9 @@ import (
 	"github.com/KainNhantumbo/books-api/database"
 	"github.com/KainNhantumbo/books-api/router"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -51,6 +53,12 @@ func main() {
 					c.GetReqHeaders()["Origin"]),
 			})
 		},
+	}))
+
+	app.Use(helmet.New())
+
+	app.Use(compress.New(compress.Config{
+		Level: compress.LevelBestSpeed,
 	}))
 
 	app.Use(logger.New(logger.Config{
