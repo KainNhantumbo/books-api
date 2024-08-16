@@ -22,10 +22,9 @@ func main() {
 	// Connect to the Database
 	database.ConnectDB()
 	var canFork bool = false
+	var allowedDomains string = config.GetEnvValue("ALLOWED_DOMAINS")
 
-	var allowedDomains string = config.Config("ALLOWED_DOMAINS")
-
-	if env := config.Config("GO_ENV"); env == "production" {
+	if env := config.GetEnvValue("GO_ENV"); env == "production" {
 		canFork = true
 	}
 
@@ -72,7 +71,7 @@ func main() {
 
 	router.AppRouter(app)
 
-	port := config.Config("PORT")
+	port := config.GetEnvValue("PORT")
 	err := app.Listen(":" + port)
 
 	if err != nil {

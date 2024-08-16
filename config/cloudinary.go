@@ -16,9 +16,9 @@ type UploadResult struct {
 func credentials() (*cloudinary.Cloudinary, context.Context) {
 	cld, _ := cloudinary.New()
 	cld.Config.URL.Secure = true
-	cld.Config.Cloud.APIKey = Config("CLOUDINARY_API_KEY")
-	cld.Config.Cloud.APISecret = Config("CLOUDINARY_API_SECRET")
-	cld.Config.Cloud.CloudName = Config("CLOUDINARY_NAME")
+	cld.Config.Cloud.APIKey = GetEnvValue("CLOUDINARY_API_KEY")
+	cld.Config.Cloud.APISecret = GetEnvValue("CLOUDINARY_API_SECRET")
+	cld.Config.Cloud.CloudName = GetEnvValue("CLOUDINARY_NAME")
 
 	ctx := context.Background()
 	return cld, ctx

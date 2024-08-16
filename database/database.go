@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/KainNhantumbo/books-api/config"
-	model "github.com/KainNhantumbo/books-api/models"
+	"github.com/KainNhantumbo/books-api/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,7 +15,7 @@ var DB *gorm.DB
 // ConnectDB connect to db
 func ConnectDB() {
 	var err error
-	connection := config.Config("DATABASE_URL")
+	connection := config.GetEnvValue("DATABASE_URL")
 	DB, err = gorm.Open(postgres.Open(connection), &gorm.Config{})
 
 	if err != nil {
@@ -36,5 +36,5 @@ func ConnectDB() {
 
 	// Migrate the database
 	DB.AutoMigrate(&model.Book{})
-	fmt.Println("Database Migrated")
+	fmt.Println("Database Migrated.")
 }
