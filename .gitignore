@@ -14,7 +14,7 @@ books-api
 *.out
 .vscode
 .env
-.env.*
+.env.local
 
 # Dependency directories (remove the comment below to include it)
 vendor
