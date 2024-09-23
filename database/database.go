@@ -15,22 +15,12 @@ var DB *gorm.DB
 // ConnectDB connect to db
 func ConnectDB() {
 	var err error
-	connection := config.GetEnvValue("DATABASE_URL")
-	DB, err = gorm.Open(postgres.Open(connection), &gorm.Config{})
+	DATABASE_URL := config.GetEnvValue("DATABASE_URL")
+	DB, err = gorm.Open(postgres.Open(DATABASE_URL), &gorm.Config{})
 
 	if err != nil {
 		panic("Failed to connect database.")
 	}
-
-	// sqlDB, err := DB.DB()
-
-	// if err != nil {
-	// 	log.Fatalf("Failed to get *sql.DB: %v", err)
-	// }
-
-	// if err := sqlDB.Close(); err != nil {
-	// 	log.Fatalf("failed to close the database connection: %v", err)
-	// }
 
 	fmt.Println("Database connected!")
 
