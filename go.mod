@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/cloudinary/cloudinary-go/v2 v2.8.0
-	github.com/gofiber/fiber/v2 v2.52.12
+	github.com/gofiber/fiber/v2 v2.52.13
 	github.com/gofiber/swagger v1.1.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
